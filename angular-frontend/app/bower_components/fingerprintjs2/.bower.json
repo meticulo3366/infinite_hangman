@@ -1,0 +1,37 @@
+{
+  "name": "fingerprintjs2",
+  "description": "Modern & flexible browser fingerprinting library",
+  "main": "dist/fingerprint2.min.js",
+  "moduleType": [
+    "es6"
+  ],
+  "keywords": [
+    "browser",
+    "fingerprint",
+    "fingerprinting",
+    "security",
+    "privacy"
+  ],
+  "authors": [
+    "Valentin Vasilev"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "spec"
+  ],
+  "homepage": "https://github.com/Valve/fingerprintjs2",
+  "version": "0.7.5",
+  "_release": "0.7.5",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.7.5",
+    "commit": "052771cb5652992581eb322be4070812887815d4"
+  },
+  "_source": "git://github.com/Valve/fingerprintjs2.git",
+  "_target": "~0.7.5",
+  "_originalSource": "fingerprintjs2",
+  "_direct": true
+}

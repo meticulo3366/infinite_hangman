@@ -1,3 +1,15 @@
+# INFINITY HANGMAN
+
+##ZEKE DEAN HANGMAN GAME
+
+[reason to use web sockets over http](http://blog.arungupta.me/rest-vs-websocket-comparison-benchmarks/)
+
+## Architecture
+* 2 Services, messaging chat service and hangman game service
+* 2 UI interfaces
+* username is uniquely fingerprinted from the start
+
+
 # Angular-Flavored Chat
 
 Sample AngularJS + NodeJS/Express application demonstrating the use of

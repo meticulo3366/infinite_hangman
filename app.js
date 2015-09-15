@@ -16,8 +16,17 @@ var express = require('express'),
 // set up our JSON API for later
 require('./routes/api')(app);
 
+//set up the one instance of the hangman game, that everyone connects too
+var puzzle = require('./gameLogic/gameLogic.js');
+console.log("******** GAME INIT ***********")
+console.log(puzzle.getCurrent() );
+puzzle.newPuzzle()
+console.log(puzzle.getCurrent() );
+console.log(puzzle);
+console.log("******************************")
+
 // set up our socket server
-require('./sockets/base')(io);
+require('./sockets/base')(io,puzzle);
 
 // start the server
 server.listen(3000);
