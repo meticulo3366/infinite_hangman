@@ -32,7 +32,8 @@ require('./sockets/base')(io,puzzle);
 server.listen(3000);
 
 // optional - set socket.io logging level
-io.set('log level', 1000);
+//io.set('log level', 1000);
+io.set('log level', 1);
 
 // view engine setup (for later)
 app.set('views', path.join(__dirname, 'views'));

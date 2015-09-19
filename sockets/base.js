@@ -1,17 +1,22 @@
 //puzzle = require('./gameLogic.js');
 var shortid = require("shortid")
 
+//array of connected users with socket key values
+var connectedUsers = {};
 
 module.exports = function (io,puzzle) {
   'use strict';
   io.on('connection', function (socket) {
     //create word for game!
-    console.log(puzzle);
+   // console.log(puzzle);
     //puzzle.newPuzzle()
 
     //generate new user and send welcome message
     var newUserID  = shortid.generate();
     var newUserMsg = "new user connected => " + newUserID;
+    //store the socket value in the UID key value store
+    connectedUsers[newUserID] = io;
+
     //socket.broadcast.emit('user connected');
     io.sockets.emit('connection', {
       payload: newUserMsg,
