@@ -13,6 +13,14 @@ var express = require('express'),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser');
 
+    /*var v8 = require('v8');
+    console.log(v8.getHeapStatistics())*/
+
+// set an UNLIMITED NUMBER OF SOCKETS
+http.globalAgent.maxSockets = Infinity
+
+
+
 // set up our JSON API for later
 require('./routes/api')(app);
 
@@ -33,6 +41,8 @@ server.listen(3000);
 
 // optional - set socket.io logging level
 //io.set('log level', 1000);
+//io.set('heartbeat interval', 100);
+//io.set('destroy upgrade',false)
 io.set('log level', 1);
 
 // view engine setup (for later)

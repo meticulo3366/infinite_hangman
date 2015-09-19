@@ -19,6 +19,7 @@
     "socket.io": "^0.9.17",
     "socket.io-client": "^0.9.17",
     "static-favicon": "~1.0.0",
-    "stylus": "0.42.3"
+    "stylus": "0.42.3",
+    "v8": "^0.1.0"
   }
 }

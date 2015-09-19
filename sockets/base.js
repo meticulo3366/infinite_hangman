@@ -14,8 +14,9 @@ module.exports = function (io,puzzle) {
     //generate new user and send welcome message
     var newUserID  = shortid.generate();
     var newUserMsg = "new user connected => " + newUserID;
+    console.log(newUserMsg);
     //store the socket value in the UID key value store
-    connectedUsers[newUserID] = io;
+    //connectedUsers[newUserID] = io;
 
     //socket.broadcast.emit('user connected');
     io.sockets.emit('connection', {
@@ -23,6 +24,9 @@ module.exports = function (io,puzzle) {
       source: newUserID
     });
 
+    io.sockets.emit('broadcast',{
+      payload: newUserMsg,
+    });
 
     //create the init game data for the user once
     //they have connected
@@ -86,10 +90,11 @@ module.exports = function (io,puzzle) {
         });
 
       }else{
-          io.sockets.emit('broadcast', {
+          console.log(letter);
+          /*io.sockets.emit('broadcast', {
             payload: "\'"+letter+"\' has already been tried" ,
             source: from
-          });
+          });*/
       }
       console.log('broadcast complete');
     });

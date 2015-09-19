@@ -5,6 +5,7 @@ var io = require('socket.io-client');
     //server = require('../1millionScaleApp');
 // Load Chance
 var Chance = require('chance');
+var chance = new Chance();
 
 
 
@@ -20,7 +21,7 @@ var chatUser2 = {'name':'Sally'};
 var chatUser3 = {'name':'Dana'};
   
 describe("Chat Server",function(){
-
+  var superClient =  io.connect(socketURL, options);
   /* Test 1 - A Single User */
   it('Should broadcast new user once they connect',function(done){
     var client = io.connect(socketURL, options);
@@ -48,29 +49,31 @@ describe("Chat Server",function(){
 
 
   /* Test 2 - Allow 1 thousand connected users */
-  
+/*  
   it('should allow 1 thousand users to connect',function(done){
     var IDs = [];
+    var numUsers=1000;
     var onceTearMeDown = true;
     //disable timeouts as we need to test with alot of users
-    this.timeout(0);
+    this.timeout(10000);
 
     //teardown code
       var teardown1000 = function(){
+        onceTearMeDown = false
         console.log("******");
-        console.log(IDs);
+        //console.log(IDs);
         console.log(Object.keys(IDs).length);
         console.log("******");
-        IDs.length.should.aboveOrEqual(1000);
+        IDs.length.should.aboveOrEqual(numUsers);
         //now tear down 1,000,002 users from server
-        for (var i = 0; i < IDs.length; i++) {
+        for (var i = 0; i <= numUsers; i++) {
           IDs[i][1].disconnect()
         };
         done();
       };
 
 
-    for (var i = 0; i < 1000; i++) {
+    for (var i = 0; i < numUsers+1; i++) {
           var client = io.connect(socketURL, options);
           var UID;
 
@@ -80,10 +83,10 @@ describe("Chat Server",function(){
               IDs.push(storable);
               //push unique user id and client connection
               var sizeOfConnections = IDs.length
-              console.log("added user "+i+": "+storable)
+              //console.log("added user "+i+": "+storable)
               //console.log(IDs)
-              console.log(sizeOfConnections)
-              if (sizeOfConnections == 1000){
+              //console.log(sizeOfConnections)
+              if (sizeOfConnections > numUsers){
                 teardown1000();
               }
             }
@@ -92,8 +95,10 @@ describe("Chat Server",function(){
     };
 
   });
+*/
 
   /* Test 3 - Allow 1 million and 1 connected users */
+  /*
   it('should allow 1 million and 1 users to connect',function(done){
     console.log(" $$$$ 1 Million and 1 Users $$$ ")
     var numUsers = 1000001
@@ -106,10 +111,6 @@ describe("Chat Server",function(){
     //teardown code
       var teardown1000001 = function(){
         onceTearMeDown = false;
-        /*console.log("******");
-        console.log(IDs);
-        console.log(Object.keys(IDs).length);
-        console.log("******");*/
         IDs.length.should.aboveOrEqual(halfUsers);
         //now tear down 1,000,002 users from server
         for (var i = 0; i < IDs.length; i++) {
@@ -127,8 +128,6 @@ describe("Chat Server",function(){
             if( onceTearMeDown ){ 
               var storable = new Array(i,client,data.source);
               IDs.push(storable);
-              /*console.log("added user "+i+": "+client+" @ "+data.source)
-              console.log(data.source + " is connected at number of users "+ IDs.length);*/
               //push unique user id and client connection
               var sizeOfConnections = IDs.length
               if (sizeOfConnections >= halfUsers){
@@ -140,11 +139,14 @@ describe("Chat Server",function(){
     };
 
   });
+*/
 
   /* Test 4 - Allow 1 million and 1 hello messages */
-  it('should allow 1 million and 1 users to say their names',function(done){
-    var numUsers = 1001
+  
+  it('should allow 1 thousand to submit hangman picks',function(done){
+    var numUsers = 100001
     var IDs = [];
+    var connections = [];
     var messages = [];
     var onceTearMeDown = true;
     var onceAllMessages = true;
@@ -153,38 +155,49 @@ describe("Chat Server",function(){
 
     //1 million new users say hi
       var helloFrom1000001Users = function(){
+        onceAllMessages ==false
         IDs.length.should.aboveOrEqual(numUsers);
         //now tear down 1,000,002 users from server
         for (var i = 0; i < IDs.length; i++) {
           var UID = IDs[i][2]
           //say hello from 1,000,001 users!
-          IDs[i][1].emit('broadcast',{payload:'hi',source:UID} );
+          var RANDOM_LETTER_TO_SUBMIT = chance.character({casing: 'lower',alpha: true});
+          
+          connections[i].emit('submit',{payload:RANDOM_LETTER_TO_SUBMIT,source:UID} );
+          //superClient.emit('submit',{payload:RANDOM_LETTER_TO_SUBMIT,source:UID} );
+
         };
         //done();
       };
     //teardown code
       var teardown1000001 = function(){
+        onceTearMeDown = false
         IDs.length.should.aboveOrEqual(numUsers);
         //now tear down 1,000,002 users from server
         for (var i = 0; i < IDs.length; i++) {
-          IDs[i][1].disconnect()
+          connections[i].emit('broadcast',{payload: "user "+IDs[i][2]+" has left the game"})
+          connections[i].disconnect();
+          //IDs[i][1].emit('broadcast',{payload: "user "+IDs[i][2]+" has left the game"}).disconnect()
+          //superClient.emit('broadcast',{payload: "user "+IDs[i][2]+" has left the game"});
         };
         done();
       };
 
 
-    for (var i = 0; i < numUsers; i++) {
-          var client = io.connect(socketURL, options);
+    for (var i = 0; i < numUsers+1; i++) {
+          connections.push(io.connect(socketURL, options));
           var UID;
 
-          client.on('connection',function(data){
+          connections[i].on('connection',function(data){
             if( onceTearMeDown ){ 
-              var storable = new Array(i,client,data.source);
+              var storable = new Array(i,1,data.source);
               IDs.push(storable);
               //push unique user id and client connection
               var sizeOfConnections = IDs.length
-              if (sizeOfConnections == numUsers){
+              if (sizeOfConnections > numUsers){
                 //teardown1000001();
+                onceTearMeDown = false
+                console.log("*** 100,001 Users!! ***")
                 helloFrom1000001Users();
               }
             }
@@ -192,14 +205,16 @@ describe("Chat Server",function(){
 
           
           //here is the broadcast code
-          client.on('broadcast',function(data){
+          connections[i].on('broadcast',function(data){
             //client is set up to recieve messages
             if( onceAllMessages ){ 
-              var storable = new Array(i,client,data.source);
-              nessages.push(storable);
+              //console.log(data)
+              var storable = new Array(i,1,data.source);
+              messages.push(storable);
               //push unique user id and client connection
-              var sizeOfConnections = nessages.length
-              if (sizeOfConnections == 1000001){
+              var sizeOfConnections = messages.length
+              if (sizeOfConnections > numUsers){
+                onceAllMessages = false
                 teardown1000001();
                 //helloFrom1000001Users();
               }
@@ -210,5 +225,6 @@ describe("Chat Server",function(){
     };
 
   });
+  
 
 });
