@@ -6,7 +6,7 @@
 
 
   //var puzzle = {};
-
+  var letters  = { 'a':0,'b':0,'c':0,'d':0,'e':0,'f':0,'g':0,'h':0,'i':0,'j':0,'k':0,'l':0,'m':0,'n':0,'o':0,'p':0,'q':0,'r':0,'s':0,'t':0,'u':0,'v':0,'w':0,'x':0,'y':0,'z':0 }
   var solution = "";
   var currentAnswer = "";
 
@@ -55,6 +55,15 @@
     }
   };
 
+  exports.checkKey = function(ltr){
+    if (letters[ltr] == 0) {
+        letters[ltr] = 1
+        return true
+    } else {
+        return false;
+    };
+  };
+
   exports.setCurrent = function (ltr) {
     var solutionLength = solution.length;
     var isCharNotInWord = true;
@@ -78,8 +87,10 @@
   }
 
   exports.newPuzzle = function () {
-    solution = _pickWord();
+    solution      = _pickWord();
     currentAnswer = _initCurrent();
+    count         = 1
+    letters  = { 'a':0,'b':0,'c':0,'d':0,'e':0,'f':0,'g':0,'h':0,'i':0,'j':0,'k':0,'l':0,'m':0,'n':0,'o':0,'p':0,'q':0,'r':0,'s':0,'t':0,'u':0,'v':0,'w':0,'x':0,'y':0,'z':0 }
   };
 
   exports.isWon = function () {
@@ -98,7 +109,10 @@
     return words.length;
   };
 
+  // play one letter
+  exports.playOnce = function(ltr){
 
+  }
 
 
   var words = [

@@ -2,8 +2,10 @@
 
 angular.module('chatApp')
 .controller('HangmanCtrl', function ($log, $scope, chatSocket, messageFormatter, nickName,hangmanInterface) {
-  $scope.word = hangmanInterface.getWord();
-  $scope.turn = hangmanInterface.getTurn();
+  $scope.word   = hangmanInterface.getWord();
+  $scope.turn   = hangmanInterface.getTurn();
+  $scope.status = hangmanInterface.getStatus();
+
   /*
   $scope.sendMessage = function() {
     var match = $scope.message.match('^\/nick (.*)');
@@ -40,6 +42,15 @@ angular.module('chatApp')
         $scope.word = hangmanInterface.getWord();
         hangmanInterface.setTurn(data['turn']);
         $scope.turn = hangmanInterface.getTurn();
+
+        var gameStatus = data['status'];
+        if(gameStatus == 0){
+          $scope.status =  10-hangmanInterface.getTurn() + " TURNS REMAINING"
+        } else if (gameStatus == 1) {
+          $scope.status = "GAME WON"
+        } else if (gameStatus == 2) {
+          $scope.status = "GAME LOST"
+        };
     });
   });
   

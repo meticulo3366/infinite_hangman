@@ -19,46 +19,51 @@
 <!-- endbuild -->
 </head>
 <body ng-app="chatApp">
-<h1>Angular Chatter</h1>
+<center><h1>Infinity Hangman</h1></center>
 
 <!-- hangman game controller -->
-<div class='container'>
-  <div ng-controller='HangmanCtrl'>
-    <img ng-src="images/{{turn}}.png" alt="IMAGE_HERE">
-    <h1>{{word}}</h1>
+<center> 
+  <div class='container'>
+    <div ng-controller='HangmanCtrl'>
+      <h1>{{status}}</h1>
+      <img ng-src="images/{{turn}}.png" alt="IMAGE_HERE">
+      <h1>{{word}}</h1>
+    </div>
   </div>
-</div>
+</center>
 
 <!-- socket interface -->
-<div class='container'>
-  <div ng-controller='SocketCtrl'>
-    You are known as: <span ng-bind="nickName"></span>.<br/>Change your nickname with <code>/nick [yourNewNick]</code>
-    <div class='row'>
-      <div class='col-md-9'>
-        <chat-box></chat-box>
+<center>
+  <div class='container'>
+    <div ng-controller='SocketCtrl'>
+      You are known as: <span ng-bind="nickName"></span>.<br/>Vote Letters with <code>/submit [letter]</code>
+      <div class='row'>
+        <div class='col-md-9'>
+          <chat-box></chat-box>
+        </div>
       </div>
-    </div>
-    <div class='row'>
-      &nbsp;
-    </div>
-    <div class='row'>
-      <div class='col-md-8'>
-        <form role='form' novalidate name='form'>
-          <div class='form-group'>
-            <input type='text' style='width: 80%'
-            required
-            ng-max='50'
-            ng-model='message'
-            focus>
-            <button class='btn btn-sm btn-primary'
-              ng-enable='form.$valid'
-              ng-click="sendMessage(message)">Send!</button>
-          </div>
-        </form>
+      <div class='row'>
+        &nbsp;
+      </div>
+      <div class='row'>
+        <div class='col-md-8'>
+          <form role='form' novalidate name='form'>
+            <div class='form-group'>
+              <input type='text' style='width: 80%'
+              required
+              ng-max='50'
+              ng-model='message'
+              focus>
+              <button class='btn btn-sm btn-primary'
+                ng-enable='form.$valid'
+                ng-click="sendMessage(message)">Send!</button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>
-</div>
+</center>
 <hr/>
 
 

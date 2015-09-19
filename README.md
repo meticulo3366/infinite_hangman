@@ -9,6 +9,17 @@
 * 2 UI interfaces
 * username is uniquely fingerprinted from the start
 
+## Millions of User Scaling...
+* usernames and IDs limited to 7 characters
+* /commands limited to 7 characters
+* user can only send 1 character at a time during the voting session
+
+
+
+
+#++++++++++++++++++++OLD README BELOW++++++++++++++++++++++
+
+
 
 # Angular-Flavored Chat
 
