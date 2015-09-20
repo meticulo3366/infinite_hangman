@@ -1,2 +1,7 @@
-test/node_modules
+test
 support
+.gitignore
+.npmignore
+.travis.yml
+.zuul.yml
+Makefile

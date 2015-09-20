@@ -50,7 +50,7 @@ angular.module('chatApp')
     });
   });
 
-  $scope.$on('socket:connection', function(event,data){
+  $scope.$on('socket:connected', function(event,data){
     //only set the UID once!
     if ( hangmanInterface.getUID() == 0 ){ 
       console.log("socket:connection")

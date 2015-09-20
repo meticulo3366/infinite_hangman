@@ -1,15 +1,14 @@
 {
   "name": "socket.io",
   "homepage": "https://github.com/LearnBoost/socket.io",
-  "version": "0.9.15",
-  "_release": "0.9.15",
+  "version": "1.3.6",
+  "_release": "1.3.6",
   "_resolution": {
     "type": "version",
-    "tag": "0.9.15",
-    "commit": "2102397e25c3d1f5d10f55c76ec6d09f549fb9ae"
+    "tag": "1.3.6",
+    "commit": "24e241432e5069930ac4254d9cfd6fa871325b84"
   },
   "_source": "git://github.com/LearnBoost/socket.io.git",
-  "_target": "~0.9.15",
-  "_originalSource": "socket.io",
-  "_direct": true
+  "_target": "^1.3.6",
+  "_originalSource": "socket.io"
 }

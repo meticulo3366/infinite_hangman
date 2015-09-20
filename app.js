@@ -33,17 +33,24 @@ console.log(puzzle.getCurrent() );
 console.log(puzzle);
 console.log("******************************")
 
+//use redis for a message queue
+//var redis = require('socket.io-redis');
+//io.adapter(redis({ host: 'localhost', port: 6379 }));
+
 // set up our socket server
 require('./sockets/base')(io,puzzle);
 
 // start the server
 server.listen(3000);
 
+var redis = require('socket.io-redis');
+io.adapter(redis({ host: 'localhost', port: 6379 }));
+
 // optional - set socket.io logging level
 //io.set('log level', 1000);
 //io.set('heartbeat interval', 100);
 //io.set('destroy upgrade',false)
-io.set('log level', 1);
+//io.set('log level', 1);
 
 // view engine setup (for later)
 app.set('views', path.join(__dirname, 'views'));
