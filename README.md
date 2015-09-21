@@ -56,7 +56,7 @@ Uses [NGINX](https://www.nginx.com/resources/wiki/), [Redis](http://redis.io/), 
 ###Redis Diagram
    [![alt](pictures/backend_architecture.png)](https://github.com/rajaraodv/rabbitpubsub)
    
-###Clients Networking Diagram
+###Client Networking Diagram
    [![alt text](pictures/InfinityHangmanDiagram.png)](pictures/InfinityHangmanDiagram.png)
 
   
