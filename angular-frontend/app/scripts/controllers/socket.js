@@ -5,7 +5,8 @@
 angular.module('chatApp')
 .controller('SocketCtrl', function ($log, $scope, chatSocket, messageFormatter, hangmanInterface) {
   //$scope.nickName = nickName;
-  $scope.messageLog = 'Ready to chat!';
+  $scope.messageLog  = 'Ready to chat!';
+  $scope.activeUsers = 1;
   
   $scope.sendMessage = function() {
     var nickName = hangmanInterface.getUID();
@@ -39,15 +40,15 @@ angular.module('chatApp')
 
   //this socket channel is the general communications channel
   $scope.$on('socket:broadcast', function(event, data) {
-    $log.debug('got a message', event.name);
-    if (!data.payload) {
-      $log.error('invalid message', 'event', event, 'data', JSON.stringify(data));
-      return;
-    } 
-    var messageSource = data.source || ''
-    $scope.$apply(function() {
-      $scope.messageLog = $scope.messageLog + messageFormatter(new Date(), messageSource, data.payload);
-    });
+      $log.debug('got a message', event.name);
+      if (!data.payload) {
+        $log.error('invalid message', 'event', event, 'data', JSON.stringify(data));
+        return;
+      } 
+      var messageSource = data.source || ''
+      $scope.$apply(function() {
+        $scope.messageLog = $scope.messageLog + messageFormatter(new Date(), messageSource, data.payload);
+      });
   });
 
   $scope.$on('socket:connected', function(event,data){
@@ -64,6 +65,8 @@ angular.module('chatApp')
       hangmanInterface.setUID(nickNameNEW)
       console.log("$$$$$$$$$")
       console.log( hangmanInterface.getUID() )
+      //increment active users
+      //$scope.activeUsers  = data.numUsers;
     }
     //this.nickName = hangmanInterface.getUID()
 

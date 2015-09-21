@@ -1,3 +1,5 @@
+//this is not yet used!!!
+
 'use strict';
 //boolean to enable locking and unlocking of the voting system
 var  isTakingVotes = false;

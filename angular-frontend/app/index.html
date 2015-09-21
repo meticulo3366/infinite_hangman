@@ -17,6 +17,40 @@
 <!-- build:css({.tmp,app}) styles/main.css -->
 <link rel="stylesheet" href="styles/main.css">
 <!-- endbuild -->
+  <style type="text/css">
+    #img0{
+      display: none;
+    }
+    #img1{
+      display: none;
+    }
+    #img2{
+      display: none;
+    }
+    #img3{
+      display: none;
+    }
+    #img4{
+      display: none;
+    }
+    #img5{
+      display: none;
+    }
+    #img6{
+      display: none;
+    }
+    #img7{
+      display: none;
+    }
+    #img8{
+      display: none;
+    }
+    #img9{
+      display: none;
+    }
+
+  </style>
+
 </head>
 <body ng-app="chatApp">
 <center><h1>Infinity Hangman</h1></center>
@@ -26,6 +60,17 @@
   <div class='container'>
     <div ng-controller='HangmanCtrl'>
       <h1>{{status}}</h1>
+      <!-- CACHE ALL THE IMAGES FOR FAST PROCESSING -->
+      <img src="images/0.png" id='img0'>
+      <img src="images/1.png" id='img1'>
+      <img src="images/2.png" id='img2'>
+      <img src="images/3.png" id='img3'>
+      <img src="images/4.png" id='img4'>
+      <img src="images/5.png" id='img5'>
+      <img src="images/6.png" id='img6'>
+      <img src="images/7.png" id='img7'>
+      <img src="images/8.png" id='img8'>
+      <img src="images/9.png" id='img9'>
       <img ng-src="images/{{turn}}.png" alt="IMAGE_HERE">
       <h1>{{word}}</h1>
     </div>
@@ -36,6 +81,7 @@
 <center>
   <div class='container'>
     <div ng-controller='SocketCtrl'>
+      <!--Active Users: <span ng-bind="activeUsers"></span></br>-->
       You are known as: <span ng-bind="nickName"></span>.<br/>Vote Letters with <code>/submit [letter]</code>
       <div class='row'>
         <div class='col-md-9'>
@@ -65,7 +111,6 @@
   </div>
 </center>
 <hr/>
-
 
 <!-- build:js scripts/vendor.js -->
 <script src="bower_components/socket.io-client/socket.io.js"></script>

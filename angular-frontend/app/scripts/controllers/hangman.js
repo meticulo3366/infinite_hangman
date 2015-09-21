@@ -27,14 +27,8 @@ angular.module('chatApp')
   */
 
   $scope.$on('socket:submit', function(event, data) {
-    $log.debug('got a message', event.name);
-    console.log(data)
-    console.log(data.word)
-    console.log(data.turn)
-    /*if (!data.payload) {
-      $log.error('invalid message', 'event', event, 'data', JSON.stringify(data));
-      return;
-    }*/
+    //$log.debug('got a message', event.name);
+
     $scope.$apply(function() {
       $scope.messageLog = $scope.messageLog + messageFormatter(new Date(), data.source, data.payload);
         //update the local service data and the user experience

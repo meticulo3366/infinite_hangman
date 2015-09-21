@@ -5,14 +5,15 @@ var shortid = require("shortid")
 
 //array of connected users with socket key values
 var connectedUsers = {};
+var users = 0;
 
-module.exports = function (io,puzzle) {
+module.exports = function (io,puzzle,isDisableBroadcast) {
   //'use strict';
   io.on('connection', function (socket) {
     //create word for game!
    // console.log(puzzle);
     //puzzle.newPuzzle()
-
+    users ++;
     //generate new user and send welcome message
     var newUserID  = shortid.generate();
     var newUserMsg = "new user connected => " + newUserID;
@@ -22,15 +23,18 @@ module.exports = function (io,puzzle) {
     connectedUsers[newUserID] = io;
 
     // socket.broadcast.emit('user connected');
-    //connectedUsers[newUserID].emit('connected', {
     connectedUsers[newUserID].emit('connected', {
+    //io.emit('connected', {
       payload: newUserMsg,
       source: newUserID
     });
     
-    io.emit('broadcast',{
-      payload: newUserMsg,
-    });
+    //slow mode enables broadcasting!
+    if(isDisableBroadcast){
+      io.emit('broadcast',{
+        payload: newUserMsg,
+      });
+    }
 
     // create the init game data for the user once
     // they have connected
@@ -47,6 +51,7 @@ module.exports = function (io,puzzle) {
 
         console.log('broadcasting message');
         console.log('payload is', msg);
+
         io.emit('broadcast', {
           payload: msg || from,
           source: from
@@ -57,18 +62,12 @@ module.exports = function (io,puzzle) {
 
     socket.on('submit', function (letter, from) {
 
-        console.log('recieved letter => ', letter);
+        //console.log('recieved letter => ', letter);
 
         if ( puzzle.checkKey(letter) ){ 
 
           //now apply the game logic!
           puzzle.setCurrent(letter);
-
-          console.log('broadcasting message');
-          //console.log('payload is', msg);
-          console.log('SOLUTION IS:', puzzle.getSolution() );
-          console.log('CurrentWord IS:', puzzle.getCurrent()  );
-          console.log('Turns IS:', puzzle.getAttempts() );
 
           //now determine 'Win' or 'Lose' or 'continue' conditions
           // win = 1, lose = 2, continue = 0
@@ -82,27 +81,33 @@ module.exports = function (io,puzzle) {
           } else{
             gameStatus = 0;
           };
-
-          io.emit('submit', {
+          var currentGame = {
             turn: puzzle.getAttempts(),
             word: puzzle.getCurrent(),
             from: from,
             status: gameStatus
-          });  
+          };
+          //update clients on the game
+          io.emit('submit', currentGame);  
 
-          /*io.emit('broadcast', {
-            payload: 'user submitted character => ' + letter + '!' ,
-            source: from
-          });*/
+          //slow mode enables broadcasting!
+          if(isDisableBroadcast){
+            io.emit('broadcast', {
+              payload: 'user submitted character => ' + letter + '!' ,
+              source: from
+            });
+          }
 
         }else{
-            console.log(letter);
-            /*io.sockets.emit('broadcast', {
+          //slow mode enables broadcasting!
+          if(isDisableBroadcast){
+            io.emit('broadcast', {
               payload: "\'"+letter+"\' has already been tried" ,
               source: from
-            });*/
+            });
+          }
         }
-        console.log('broadcast complete');
+        
     });
 
    /*socket.on('disconnect', function() {

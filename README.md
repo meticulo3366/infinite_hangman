@@ -1,82 +1,84 @@
-# INFINITY HANGMAN
+INFINITY HANGMAN
+================
 
-##ZEKE DEAN HANGMAN GAME
+Uses [NGINX](https://www.nginx.com/resources/wiki/), [Redis](http://redis.io/), and [PM2](https://github.com/Unitech/pm2) to horizontally scale to handle a theoretically million simultaneous user game of hangman. Game only tested up to 60,000 simultaneous playing users. Mocha on the testing farm keeps running out of memory, server however does not have memory issues and should be able to scale fantastic.
 
-[reason to use web sockets over http](http://blog.arungupta.me/rest-vs-websocket-comparison-benchmarks/)
+###[Why Socket is way way fast than Restful HTTP](http://blog.arungupta.me/rest-vs-websocket-comparison-benchmarks/)
+
+#Game Rules
+* 10 trys for each game
+* Users Can't submit same characte twice
+* submit characters to game by using the `/submit ` command
+
+#HOW TO USE SERVER THE EASYWAY
+* turn on server
+  * `npm install`
+  * `SIMPLE=true node app.js`
+* make sure to find your ip address, `localhost` will not work, run this command in terminal to find your ip address
+  * `ifconfig en1 | grep 'inet ' | cut -d ' ' -f 2`
+* navigate to your ip address and port 3000 in browser
+  * `http://192.168.0.17:3000`
+* view game statistics via API GET REQUEST at /api/gameStats
+  * `http://192.168.0.17:3000/api/gameStats`
+* run the tests using mocha
+  * `mocha`
+
+#Environment Variables
+
+* `DISABLE_BROADCAST=0` disables slow broadcast messaging
+* `SIMPLE` disables reddis for message queue and socket management
+* `HOST` `SOCKET_HOST` sets the server IP addres, useful for testing
+* `PORT` `SOCKET_PORT` sets the server PORT address, useful for testing
+*  `REDIS_HOST` `REDIS_PORT` sets the redis HOST and PORT
+
+# READ [MAC INSTRUCTIONS README.md](https://github.com/meticulo3366/infinite_hangman/blob/master/MAC_INSTRUCTIONS_README.md) to get started on deploying the server farm and private cloud or local dev
+
+### [Original Angular Code base for Inspiration](https://github.com/krimple/angular-socketio-chat)
+
+## Game Logic
+* Frontend
+  * [Angular Factory Interface](angular-frontend/app/scripts/services/hangmanUserCommuncations.js)
+  * [Angular Hangman View](angular-frontend/app/scripts/controllers/hangman.js)
+* Backend
+  * [Socket Based Logic](sockets/base.js)
+  * [Hangman Game Logic](gameLogic/gameLogic.js)
+  * [Letter Polling System (Not Implemented)](gameLogic/gameLogic.js)
+* DevOps
+  * [Vagrant Deploys 6 Virtual Box Testing Machines](Vagrantfile)
+  * [NGINX acts as load balancer with IP Hashing](nginx/nginx.conf)
+  * [10 PM2 instances of server are deployed](launch10.sh)
+  * [Script to Shutdown the 6 Virtual Machines](killTesters.sh)
 
 ## Architecture
-* 2 Services, messaging chat service and hangman game service
-* 2 UI interfaces
 * username is uniquely fingerprinted from the start
+* DevOps Architecture for frontend + backend + clients as implemented (not using cloud foundary)
 
+###Redis Diagram
+   [![alt](pictures/backend_architecture.png)](https://github.com/rajaraodv/rabbitpubsub)
+   
+###Clients Networking Diagram
+   [![alt text](pictures/InfinityHangmanDiagram.png)](pictures/InfinityHangmanDiagram.png)
+
+  
 ## Millions of User Scaling...
 * usernames and IDs limited to 7 characters
 * /commands limited to 7 characters
 * user can only send 1 character at a time during the voting session
+* [Heavy Inspiration](https://github.com/rajaraodv/rabbitpubsub)
+
+### Screens
+
+![alt text](pictures/frames.png "Frames")
+
+### Game Screenshoot
+![alt text](pictures/game.png "Game")
+
+### Game Statistics Example
+![alt text](pictures/api_example.png "Game Stats API")
 
 
+## Server Farm Benchmarking Video
+[![ScreenShot](http://img.youtube.com/vi/khUlurK1WqE/0.jpg)](http://youtu.be/khUlurK1WqE)
 
-
-#++++++++++++++++++++OLD README BELOW++++++++++++++++++++++
-
-
-
-# Angular-Flavored Chat
-
-Sample AngularJS + NodeJS/Express application demonstrating the use of
-Socket.IO.  I am using:
-
-* [AngularJS](http://angularjs.org)
-* [NodeJS](http://nodejs.org)
-* [Express](http://expressjs.com) - NOTE I'm using 3.5
-* [Socket.IO and Socket.IO Client](http://socket.io) for web socket
-  support
-* [Brian Ford's Angular Socket IO
-  client](https://github.com/btford/angular-socket-io)
-* [Twitter Bootstrap](http://getbootstrap.com) and both the
-  [Express](https://www.npmjs.org/package/generator-express) and
-  [AngularJS](https://www.npmjs.org/package/generator-angular) [Yeoman](http://yeoman.io) generators.
-
-This project was a simple test of sockets as a traditional (some might
-say 'ye olde') chat program. I wanted to write it as angularly as
-possible (is that really a word?) and use the traditional Grunt-based
-workflow of Yeoman where possible.
-
-At some point I need to take a day and convert this over to a more
-comprehensive script with gulp.  Ah, todo todo...
-
-I am not using Node at this point for anything more than a chat
-websocket server, however now you're nicely set up for an /api (see the
-/route directory and js file for a stupid JSON example). 
-
-## Runtime instructions
-
-I have the root `app.js` node script pointing to serve / as the content
-in /angular-frontend/app/ - you can construct and build and minify with
-`grunt --force` in the `angular-frontend` directory. This will set the
-content in `/public` to the minified version of the application and you
-can serve that by editing `app.js`.
-
-To launch the app and run in development mode: 
-
-```bash
-node app.js
-```
-
-Once you're ready to test a final build (minified, two javascript files), do this:
-
-1.  Edit the `app.js` file and swap the commented and uncommented lines that
-serve the static content.
-
-
-2.  Run the build:
-
-```bash
-cd angular-frontend
-grunt --force
-cd ..
-node app.js
-```
-
-3. Browse to `http://localhost:3000` and you should see the chat
-client using minified scripts.
+### Future Plans
+[Look Into Using Hapi.js and Redis Messaging Queue](https://github.com/meticulo3366/hapi-socketio-redis-chat-example)

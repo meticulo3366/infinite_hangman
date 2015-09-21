@@ -4,13 +4,18 @@
 
 //var puzzle = (function(win, $) {
 
+  var shortid = require("shortid")
+
 
   //var puzzle = {};
   var letters  = { 'a':0,'b':0,'c':0,'d':0,'e':0,'f':0,'g':0,'h':0,'i':0,'j':0,'k':0,'l':0,'m':0,'n':0,'o':0,'p':0,'q':0,'r':0,'s':0,'t':0,'u':0,'v':0,'w':0,'x':0,'y':0,'z':0 }
   var solution = "";
   var currentAnswer = "";
+  var wins  = 0;
+  var loses = 0;
+  var submissions = 0;
 
-  var count = 1;
+  var count = 0;
 
   var _random = function (n) {
     return Math.floor(Math.random() * n);
@@ -56,6 +61,7 @@
   };
 
   exports.checkKey = function(ltr){
+    submissions++;
     if (letters[ltr] == 0) {
         letters[ltr] = 1
         return true
@@ -79,22 +85,39 @@
   };
 
   exports.isLost = function(){
-    return count >= 10;
+    var isGameLost = count >= 9;
+    if (isGameLost == true){
+        loses++;
+    };
+    return isGameLost
   }
 
   exports.getAttempts = function(){
     return count;
   }
 
+  exports.getStats = function(){
+    //create stats object
+    var stats = {}
+    stats.wins = wins
+    stats.loses = loses
+    stats.submissions = submissions
+    return stats
+  }
+
   exports.newPuzzle = function () {
     solution      = _pickWord();
     currentAnswer = _initCurrent();
-    count         = 1;
+    count         = 0;
     letters  = { 'a':0,'b':0,'c':0,'d':0,'e':0,'f':0,'g':0,'h':0,'i':0,'j':0,'k':0,'l':0,'m':0,'n':0,'o':0,'p':0,'q':0,'r':0,'s':0,'t':0,'u':0,'v':0,'w':0,'x':0,'y':0,'z':0 };
   };
 
   exports.isWon = function () {
-    return solution === currentAnswer;
+    var isGameWon = solution === currentAnswer;
+    if (isGameWon == true){
+        wins++;
+    };
+    return isGameWon
   };
 
   exports.getSolution = function () {
@@ -375,9 +398,3 @@
     "world wide web",
     "secure shell"
   ]
-
-
-  //return puzzle;
-//}
-
-//exports.puzzle = puzzle

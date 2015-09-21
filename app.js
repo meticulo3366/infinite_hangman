@@ -2,6 +2,14 @@
 //config file
 var config  = require('./config/config');
 
+// global environment variable for fast mode 
+// fast mode disables all broadcasting
+var isDisableBroadcast = true
+if(process.env.DISABLE_BROADCAST){
+  console.log("$$$$$  SPEED MODE  $$$$$")
+  isDisableBroadcast = false
+}
+
 // define globals
 var express = require('express'),
     io = require('socket.io'),
@@ -23,11 +31,10 @@ http.globalAgent.maxSockets = Infinity
 
 
 
-// set up our JSON API for later
-require('./routes/api')(app);
+var puzzle = require('./gameLogic/gameLogic.js');
 
 //set up the one instance of the hangman game, that everyone connects too
-var puzzle = require('./gameLogic/gameLogic.js');
+
 console.log("******** GAME INIT ***********")
 console.log(puzzle.getCurrent() );
 puzzle.newPuzzle()
@@ -35,18 +42,26 @@ console.log(puzzle.getCurrent() );
 console.log(puzzle);
 console.log("******************************")
 
+// set up our JSON API for later
+require('./routes/api')(app,puzzle);
+
+
+
 //use redis for a message queue
 //var redis = require('socket.io-redis');
 //io.adapter(redis({ host: 'localhost', port: 6379 }));
 
 // set up our socket server
-require('./sockets/base')(io,puzzle);
+require('./sockets/base')(io,puzzle,isDisableBroadcast);
 
 // start the server
 server.listen(config.server.port);
 
-var redis = require('socket.io-redis');
-io.adapter(redis({ host: 'localhost', port: 6379 }));
+if (process.env.SIMPLE) {} else{
+  var redis = require('socket.io-redis');
+  io.adapter(redis({ host: config.redis.host, port: config.redis.port }));  
+};
+
 
 // optional - set socket.io logging level
 //io.set('log level', 1000);

@@ -1,13 +1,11 @@
-module.exports = function(app) {
+module.exports = function(app,puzzle) {
     'use strict';
 
   /* GET users listing. */
-  app.get('/api/test', function(req, res) {
-    res.send([
-      {
-        a: 'b',
-        c: 'd'
-      }]);
+  app.get('/api/gameStats', function(req, res) {
+    var stats = puzzle.getStats();
+    console.log(stats);
+    res.send([puzzle.getStats()]);
   });
 };
 
