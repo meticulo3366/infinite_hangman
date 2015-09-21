@@ -22,6 +22,7 @@ module.exports = function (io,puzzle) {
     connectedUsers[newUserID] = io;
 
     // socket.broadcast.emit('user connected');
+    //connectedUsers[newUserID].emit('connected', {
     connectedUsers[newUserID].emit('connected', {
       payload: newUserMsg,
       source: newUserID
@@ -103,6 +104,13 @@ module.exports = function (io,puzzle) {
         }
         console.log('broadcast complete');
     });
+
+   /*socket.on('disconnect', function() {
+      console.log('Got disconnect!');
+
+      var i = connectedUsers[socket];
+      delete connectedUsers[i];
+   });*/
 
   });
 };

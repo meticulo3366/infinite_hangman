@@ -1,4 +1,6 @@
 'use strict';
+//config file
+var config  = require('./config/config');
 
 // define globals
 var express = require('express'),
@@ -41,7 +43,7 @@ console.log("******************************")
 require('./sockets/base')(io,puzzle);
 
 // start the server
-server.listen(3000);
+server.listen(config.server.port);
 
 var redis = require('socket.io-redis');
 io.adapter(redis({ host: 'localhost', port: 6379 }));

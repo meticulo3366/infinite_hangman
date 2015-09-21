@@ -6,11 +6,13 @@ var io = require('socket.io-client');
 // Load Chance
 var Chance = require('chance');
 var chance = new Chance();
-
+var config = require('../config/config')
 
 
 //var socketURL = 'http://0.0.0.0:3000';
-var socketURL = 'http://192.168.0.17:3000';
+var hostName = process.env.SOCKET_SERVER || process.env.HOST || '0.0.0.0';
+var socketURL = 'http://'+hostName+':'+config.server.port;
+console.log(socketURL);
 
 var options ={
   transports: ['websocket','ws'],
@@ -23,6 +25,7 @@ var chatUser3 = {'name':'Dana'};
   
 describe("Chat Server",function(){
   this.timeout(0)
+  //this.timeout(2000)
   var superClient =  io.connect(socketURL, options);
   /* Test 1 - A Single User */
 /*
@@ -139,7 +142,7 @@ describe("Chat Server",function(){
   
   it('should allow 1 million and 1 to submit hangman picks',function(done){
     //just test only '100,000' simultanious users!
-    var numUsers = 25000
+    var numUsers = 5000
     var IDs = [];
     var connections = [];
     var messages = [];
@@ -190,7 +193,6 @@ describe("Chat Server",function(){
           connections[i].on('connected',function(data){
             if( onceTearMeDown ){ 
               var storable = new Array(i,client,data.source);
-              //console.log(data)
               IDs.push(storable);
               //push unique user id and client connection
               var sizeOfConnections = IDs.length
@@ -206,7 +208,10 @@ describe("Chat Server",function(){
             }
           });
 
-          
+          //connections[i].on('submit',function(data){
+          //  console.log(data)
+          //});
+
           //here is the broadcast code
           // these special clients do not recieve broadcast messages
           /*

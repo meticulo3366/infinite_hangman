@@ -25,7 +25,7 @@ config.token = {
 
 // Server settings
 config.server = {
-    host: '0.0.0.0',
+    host: '0.0.0.0' || process.env.HOST,
     port: process.env.NODE_PORT || process.env.PORT || 3000
 };
 

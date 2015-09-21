@@ -1,18 +1,119 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# All Vagrant configuration is done below. The "2" in Vagrant.configure
-# configures the configuration version (we support older styles for
-# backwards compatibility). Please don't change it unless you know what
-# you're doing.
-Vagrant.configure(2) do |config|
-  # The most common configuration options are documented and commented below.
-  # For a complete reference, please see the online documentation at
-  # https://docs.vagrantup.com.
 
-  # Every Vagrant development environment requires a box. You can search for
-  # boxes at https://atlas.hashicorp.com/search.
-  config.vm.box = "urban/trusty64-node"
+# every test instance needs its
+# own IP address on the network
+# *6* total test machines for
+# real load testing
+
+Vagrant.configure(2) do |config|
+  # Test worker one, 
+  config.vm.define "tester1" do |tester1|
+    tester1.vm.box = "urban/trusty64-node"
+    tester1.vm.network "public_network"
+    tester1.vm.provision "shell", inline: <<-SHELL
+      sudo npm install mocha -g
+      cd /vagrant
+      npm install
+      echo '#{ENV['SOCKET_SERVER']}'
+      echo '#{ENV['SOCKET_PORT']}'
+      env HOST='#{ENV['SOCKET_SERVER']}' mocha
+      # run the test every 5 minutes!
+      cat <(crontab -l) <(echo "1 2 3 4 5*/5 * * * * env HOST='#{ENV['SOCKET_SERVER']}' mocha") | crontab -
+      echo 0
+    SHELL
+  end
+
+  # Test worker two, 
+  config.vm.define "tester2" do |tester2|
+    tester2.vm.box = "urban/trusty64-node"
+    tester2.vm.network "public_network"
+    tester2.vm.provision "shell", inline: <<-SHELL
+      sudo npm install mocha -g
+      cd /vagrant
+      npm install
+      echo '#{ENV['SOCKET_SERVER']}'
+      echo '#{ENV['SOCKET_PORT']}'
+      env HOST='#{ENV['SOCKET_SERVER']}' mocha
+      # run the test every 5 minutes!
+      cat <(crontab -l) <(echo "1 2 3 4 5*/5 * * * * env HOST='#{ENV['SOCKET_SERVER']}' mocha") | crontab -
+      echo 0
+    SHELL
+  end
+
+  # Test worker three, 
+  config.vm.define "tester3" do |tester3|
+    tester3.vm.box = "urban/trusty64-node"
+    tester3.vm.network "public_network"
+    tester3.vm.provision "shell", inline: <<-SHELL
+      sudo npm install mocha -g
+      cd /vagrant
+      npm install
+      echo '#{ENV['SOCKET_SERVER']}'
+      echo '#{ENV['SOCKET_PORT']}'
+      env HOST='#{ENV['SOCKET_SERVER']}' mocha
+      # run the test every 5 minutes!
+      cat <(crontab -l) <(echo "1 2 3 4 5*/5 * * * * env HOST='#{ENV['SOCKET_SERVER']}' mocha") | crontab -
+      echo 0
+    SHELL
+  end
+
+  # Test worker one, 
+  config.vm.define "tester4" do |tester4|
+    tester4.vm.box = "urban/trusty64-node"
+    tester4.vm.network "public_network"
+    tester4.vm.provision "shell", inline: <<-SHELL
+      sudo npm install mocha -g
+      cd /vagrant
+      npm install
+      echo '#{ENV['SOCKET_SERVER']}'
+      echo '#{ENV['SOCKET_PORT']}'
+      env HOST='#{ENV['SOCKET_SERVER']}' mocha
+      # run the test every 5 minutes!
+      cat <(crontab -l) <(echo "1 2 3 4 5*/5 * * * * env HOST='#{ENV['SOCKET_SERVER']}' mocha") | crontab -
+      echo 0
+    SHELL
+  end
+
+  # Test worker one, 
+  config.vm.define "tester5" do |tester5|
+    tester5.vm.box = "urban/trusty64-node"
+    tester5.vm.network "public_network"
+    tester5.vm.provision "shell", inline: <<-SHELL
+      sudo npm install mocha -g
+      cd /vagrant
+      npm install
+      echo '#{ENV['SOCKET_SERVER']}'
+      echo '#{ENV['SOCKET_PORT']}'
+      env HOST='#{ENV['SOCKET_SERVER']}' mocha
+      # run the test every 5 minutes!
+      cat <(crontab -l) <(echo "1 2 3 4 5*/5 * * * * env HOST='#{ENV['SOCKET_SERVER']}' mocha") | crontab -
+      echo 0
+    SHELL
+  end
+ 
+  # Test worker one, 
+  config.vm.define "tester6" do |tester6|
+    tester6.vm.box = "urban/trusty64-node"
+    tester6.vm.network "public_network"
+    tester6.vm.provision "shell", inline: <<-SHELL
+      sudo npm install mocha -g
+      cd /vagrant
+      npm install
+      echo '#{ENV['SOCKET_SERVER']}'
+      echo '#{ENV['SOCKET_PORT']}'
+      env HOST='#{ENV['SOCKET_SERVER']}' mocha
+      # run the test every 5 minutes!
+      cat <(crontab -l) <(echo "1 2 3 4 5*/5 * * * * env HOST='#{ENV['SOCKET_SERVER']}' mocha") | crontab -
+      echo 0
+    SHELL
+  end
+
+end
+
+
+
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -31,7 +132,9 @@ Vagrant.configure(2) do |config|
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
   # your network.
-  config.vm.network "public_network"
+
+
+
 
   # Share an additional folder to the guest VM. The first argument is
   # the path on the host to the actual folder. The second argument is
@@ -64,8 +167,5 @@ Vagrant.configure(2) do |config|
   # Enable provisioning with a shell script. Additional provisioners such as
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
-  # config.vm.provision "shell", inline: <<-SHELL
-  #   sudo apt-get update
-  #   sudo apt-get install -y apache2
-  # SHELL
-end
+
+#end
