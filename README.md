@@ -68,7 +68,7 @@ Uses [NGINX](https://www.nginx.com/resources/wiki/), [Redis](http://redis.io/), 
 * user can only send 1 character at a time during the voting session
 * [Heavy Inspiration](https://github.com/rajaraodv/rabbitpubsub)
 * The ideal architecture is in the following diagram
-* ![Final Diagram](pictures/InfinityHangmanDiagramLogicServer.svg)
+* ![Final Diagram](pictures/InfinityHangmanDiagramLogic.png)
 
 ### Screens
 
