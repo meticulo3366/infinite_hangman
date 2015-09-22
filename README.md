@@ -43,6 +43,8 @@ Uses [NGINX](https://www.nginx.com/resources/wiki/), [Redis](http://redis.io/), 
   * [Socket Based Logic](sockets/base.js)
   * [Hangman Game Logic](gameLogic/gameLogic.js)
   * [Letter Polling System (Not Implemented)](gameLogic/gameLogic.js)
+* Quality Assurance
+  * [Load Testing Script](testing/test.js)
 * DevOps
   * [Vagrant Deploys 6 Virtual Box Testing Machines](Vagrantfile)
   * [NGINX acts as load balancer with IP Hashing](nginx/nginx.conf)
@@ -65,6 +67,8 @@ Uses [NGINX](https://www.nginx.com/resources/wiki/), [Redis](http://redis.io/), 
 * /commands limited to 7 characters
 * user can only send 1 character at a time during the voting session
 * [Heavy Inspiration](https://github.com/rajaraodv/rabbitpubsub)
+* The ideal architecture is in the following diagram
+* ![Final Diagram](pictures/InfinityHangmanDiagramLogicServer.svg)
 
 ### Screens
 
