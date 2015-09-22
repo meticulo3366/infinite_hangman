@@ -11,8 +11,6 @@ module.exports = function (io,puzzle,isDisableBroadcast) {
   //'use strict';
   io.on('connection', function (socket) {
     //create word for game!
-   // console.log(puzzle);
-    //puzzle.newPuzzle()
     users ++;
     //generate new user and send welcome message
     var newUserID  = shortid.generate();
@@ -22,9 +20,8 @@ module.exports = function (io,puzzle,isDisableBroadcast) {
     //store the socket value in the UID key value store
     connectedUsers[newUserID] = io;
 
-    // socket.broadcast.emit('user connected');
+    // only tell the one person they have connected
     connectedUsers[newUserID].emit('connected', {
-    //io.emit('connected', {
       payload: newUserMsg,
       source: newUserID
     });
@@ -43,8 +40,7 @@ module.exports = function (io,puzzle,isDisableBroadcast) {
         turn: puzzle.getAttempts(),
         word: puzzle.getCurrent()
     });
-    
-  //});
+
     socket.on('message', function (from, msg) {
 
         console.log('recieved message from', from, 'msg', JSON.stringify(msg));
@@ -81,6 +77,7 @@ module.exports = function (io,puzzle,isDisableBroadcast) {
           } else{
             gameStatus = 0;
           };
+
           var currentGame = {
             turn: puzzle.getAttempts(),
             word: puzzle.getCurrent(),
@@ -109,13 +106,6 @@ module.exports = function (io,puzzle,isDisableBroadcast) {
         }
         
     });
-
-   /*socket.on('disconnect', function() {
-      console.log('Got disconnect!');
-
-      var i = connectedUsers[socket];
-      delete connectedUsers[i];
-   });*/
 
   });
 };

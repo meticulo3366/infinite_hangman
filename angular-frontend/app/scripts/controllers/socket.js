@@ -1,39 +1,29 @@
 'use strict';
 
-//inject angular value 'nickName'
-
 angular.module('chatApp')
 .controller('SocketCtrl', function ($log, $scope, chatSocket, messageFormatter, hangmanInterface) {
-  //$scope.nickName = nickName;
+  //init
   $scope.messageLog  = 'Ready to chat!';
-  $scope.activeUsers = 1;
   
   $scope.sendMessage = function() {
+    //get UID from hangman interface
     var nickName = hangmanInterface.getUID();
-    
-    var submit = $scope.message.match('^\/submit (.*)');
-    //submit letter method
-    if (angular.isDefined(submit) && angular.isArray(submit) && submit.length === 2) {
-      //get UID from hangman interface
-      
-      console.log(submit)
-      console.log(submit[1])
-      //console.log(match[1][1])
-      submit = submit[1];
-      /*
-      $scope.message = '';
-      $scope.messageLog = messageFormatter(new Date(), 
-                      nickName, 'user submitted character => ' + submit + '!') + $scope.messageLog;
-      */
-      //$scope.nickName = nickName;
-      //hangmanInterface.setWord
 
+    //submit letter method    
+    var submit = $scope.message.match('^\/submit (.*)');
+    if (angular.isDefined(submit) && angular.isArray(submit) && submit.length === 2) {
+      //get char from GUI
+      submit = submit[1];
       //send user pick to server
       chatSocket.emit('submit', submit,nickName)
+      //clear console window
       $scope.message = '';
     }else{
-      $log.debug('sending message', $scope.message);
+      /*$log.debug('sending message', $scope.message);*/
+
+      //broadcast a message to all users
       chatSocket.emit('message', nickName, $scope.message);
+      //clear console window
       $scope.message = '';
     }
   };
@@ -63,25 +53,10 @@ angular.module('chatApp')
       $scope.nickName = nickNameNEW; 
       //set the angular user ID
       hangmanInterface.setUID(nickNameNEW)
-      console.log("$$$$$$$$$")
-      console.log( hangmanInterface.getUID() )
-      //increment active users
-      //$scope.activeUsers  = data.numUsers;
-    }
-    //this.nickName = hangmanInterface.getUID()
 
-    //angular.value('nickName',nickNameNEW)
+    }
+
   });
 
-  /*$scope.$on('socket:submit', function(event, data) {
-    $log.debug('got a message', event.name);
-    if (!data.payload) {
-      $log.error('invalid message', 'event', event, 'data', JSON.stringify(data));
-      return;
-    } 
-    $scope.$apply(function() {
-      $scope.messageLog = $scope.messageLog + messageFormatter(new Date(), data.source, data.payload);
-    });
-  });*/
 
 });
